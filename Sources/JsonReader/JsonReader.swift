@@ -142,3 +142,48 @@ extension JsonObject: CustomStringConvertible {
 	}
     
 }
+
+extension JsonObject: Equatable {
+    
+    static func ==(lhs: JsonObject, rhs: JsonObject) -> Bool {
+        switch lhs {
+        case .dictionnary(let ld):
+            if case let .dictionnary(rd) = rhs {
+                return ld == rd
+            } else {
+                return false
+            }
+        case .array(let la):
+            if case let .array(ra) = rhs {
+                return la == ra
+            } else {
+                return false
+            }
+        case .string(let ls):
+            if case let .string(rs) = rhs {
+                return ls == rs
+            } else {
+                return false
+            }
+        case .integer(let li):
+            if case let .integer(ri) = rhs {
+                return li == ri
+            } else {
+                return false
+            }
+        case .float(let lf):
+            if case let .float(rf) = rhs {
+                return lf == rf
+            } else {
+                return false
+            }
+        case .none:
+            if case .none = rhs {
+                return true
+            } else {
+                return false
+            }
+        }
+    }
+    
+}
