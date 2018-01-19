@@ -98,7 +98,12 @@ indirect enum JsonObject {
         return nil
     }
     
-	
+    var isNull: Bool {
+        if case .none = self {
+            return true
+        }
+        return false
+    }
 }
 
 extension JsonObject: CustomStringConvertible {
