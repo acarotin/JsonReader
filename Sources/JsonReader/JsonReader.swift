@@ -12,7 +12,8 @@ indirect enum JsonObject: CustomStringConvertible {
     case dictionnary([String: JsonObject])
     case array([JsonObject])
     case string(String)
-    case number(Double)
+    case integer(Int)
+    case float(Double)
     case boolean(Bool)
     case none
     
@@ -31,8 +32,10 @@ indirect enum JsonObject: CustomStringConvertible {
             self = .array(a)
         } else if let string = json as? String {
             self = .string(string)
-        } else if let number = json as? Double {
-            self = .number(number)
+        } else if let integer = json as? Int {
+            self = .integer(integer)
+        } else if let float = json as? Double {
+            self = .float(float)
         } else if let boolean = json as? Bool {
             self = .boolean(boolean)
         } else {
@@ -77,9 +80,16 @@ indirect enum JsonObject: CustomStringConvertible {
         return nil
     }
     
-    var numberValue: Double? {
-        if case let .number(n) = self {
-            return n
+    var integerValue: Int? {
+        if case let .integer(i) = self {
+            return i
+        }
+        return nil
+    }
+    
+    var floatValue: Double? {
+        if case let .float(f) = self {
+            return f
         }
         return nil
     }
@@ -91,22 +101,39 @@ indirect enum JsonObject: CustomStringConvertible {
         return nil
     }
     
+    func description(offsetMargin n: Int) -> String {
+        let oneMargin = "  "
+        let margin = String(repeating: oneMargin, count: n)
+        var out = ""
+        switch self {
+        case .dictionnary(let d):
+            out += "{\n"
+            for (offset: i, element: (key: key, value: value)) in d.enumerated() {
+                out += margin + oneMargin + "\"\(key)\" : " + value.description(offsetMargin: n + 1) + (i + 1 == d.count ? "\n" : ",\n")
+            }
+            out += margin + "}"
+        case .array(let a):
+            out += "[\n"
+            for (i, value) in a.enumerated() {
+                out += margin + oneMargin + value.description(offsetMargin: n + 1) + (i + 1 == a.count ? "\n" : ",\n")
+            }
+            out += margin + "]"
+        case .string(let s):
+            out += "\"\(s)\""
+        case .integer(let i):
+            out += "\(i)"
+        case .float(let f):
+            out += "\(f)"
+        case .boolean(let b):
+            out += "\(b)"
+        case .none:
+            out += "null"
+        }
+        return out
+    }
+    
     var description: String {
-        return ""
-//        switch self {
-//        case .dictionnary(let d):
-//            dump
-//        case .array(_):
-//            <#code#>
-//        case .string(_):
-//            <#code#>
-//        case .number(_):
-//            <#code#>
-//        case .boolean(_):
-//            <#code#>
-//        case .none:
-//            <#code#>
-//        }
+        return description(offsetMargin: 0)
     }
 }
 
@@ -117,6 +144,7 @@ class JsonReader {
     init(json: Any) {
         self.object = JsonObject(json: json)
     }
+    
 }
 
 extension JsonReader: CustomStringConvertible {
@@ -124,4 +152,5 @@ extension JsonReader: CustomStringConvertible {
     var description: String {
         return object.description
     }
+    
 }
