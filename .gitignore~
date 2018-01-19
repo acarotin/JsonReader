@@ -2,4 +2,3 @@
 ./.build
 /Packages
 *.xcodeproj
-*.json

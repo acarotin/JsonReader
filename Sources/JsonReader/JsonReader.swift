@@ -8,7 +8,7 @@
 
 import Foundation
 
-indirect enum JsonObject: CustomStringConvertible {
+indirect enum JsonObject {
     case dictionnary([String: JsonObject])
     case array([JsonObject])
     case string(String)
@@ -98,54 +98,42 @@ indirect enum JsonObject: CustomStringConvertible {
         return nil
     }
     
-    func description(offsetMargin n: Int) -> String {
-        let oneMargin = "  "
-        let margin = String(repeating: oneMargin, count: n)
-        var out = ""
-        switch self {
-        case .dictionnary(let d):
-            out += "{\n"
-            for (offset: i, element: (key: key, value: value)) in d.enumerated() {
-                out += margin + oneMargin + "\"\(key)\" : " + value.description(offsetMargin: n + 1) + (i + 1 == d.count ? "\n" : ",\n")
-            }
-            out += margin + "}"
-        case .array(let a):
-            out += "[\n"
-            for (i, value) in a.enumerated() {
-                out += margin + oneMargin + value.description(offsetMargin: n + 1) + (i + 1 == a.count ? "\n" : ",\n")
-            }
-            out += margin + "]"
-        case .string(let s):
-            out += "\"\(s)\""
-        case .integer(let i):
-            out += "\(i)"
-        case .float(let f):
-            out += "\(f)"
-        case .none:
-            out += "null"
-        }
-        return out
-    }
-    
-    var description: String {
-        return description(offsetMargin: 0)
-    }
+	
 }
 
-class JsonReader {
-    
-    var object: JsonObject
-    
-    init(json: Any) {
-        self.object = JsonObject(json: json)
-    }
-    
-}
-
-extension JsonReader: CustomStringConvertible {
-    
-    var description: String {
-        return object.description
-    }
+extension JsonObject: CustomStringConvertible {
+	
+	func description(offsetMargin n: Int) -> String {
+		let oneMargin = "  "
+		let margin = String(repeating: oneMargin, count: n)
+		var out = ""
+		switch self {
+		case .dictionnary(let d):
+			out += "{\n"
+			for (offset: i, element: (key: key, value: value)) in d.enumerated() {
+				out += margin + oneMargin + "\"\(key)\" : " + value.description(offsetMargin: n + 1) + (i + 1 == d.count ? "\n" : ",\n")
+			}
+			out += margin + "}"
+		case .array(let a):
+			out += "[\n"
+			for (i, value) in a.enumerated() {
+				out += margin + oneMargin + value.description(offsetMargin: n + 1) + (i + 1 == a.count ? "\n" : ",\n")
+			}
+			out += margin + "]"
+		case .string(let s):
+			out += "\"\(s)\""
+		case .integer(let i):
+			out += "\(i)"
+		case .float(let f):
+			out += "\(f)"
+		case .none:
+			out += "null"
+		}
+		return out
+	}
+	
+	var description: String {
+		return description(offsetMargin: 0)
+	}
     
 }
