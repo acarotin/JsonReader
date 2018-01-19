@@ -14,7 +14,6 @@ indirect enum JsonObject: CustomStringConvertible {
     case string(String)
     case integer(Int)
     case float(Double)
-    case boolean(Bool)
     case none
     
     init(json: Any) {
@@ -36,8 +35,6 @@ indirect enum JsonObject: CustomStringConvertible {
             self = .integer(integer)
         } else if let float = json as? Double {
             self = .float(float)
-        } else if let boolean = json as? Bool {
-            self = .boolean(boolean)
         } else {
             self = .none
         }
@@ -95,9 +92,9 @@ indirect enum JsonObject: CustomStringConvertible {
     }
     
     var booleanValue: Bool? {
-        if case let .boolean(b) = self {
-            return b
-        }
+        if case let .integer(i) = self {
+			return i != 0
+		}
         return nil
     }
     
@@ -124,8 +121,6 @@ indirect enum JsonObject: CustomStringConvertible {
             out += "\(i)"
         case .float(let f):
             out += "\(f)"
-        case .boolean(let b):
-            out += "\(b)"
         case .none:
             out += "null"
         }
