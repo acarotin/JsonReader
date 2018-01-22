@@ -56,7 +56,7 @@ if let name = object["person"]?[0]?["name"]?.stringValue {
 }
 ```
 
-To do so, we turn the json result into an enumeration that define witch type it is :
+To do so, we turn the json result into an enumeration that define which type it is :
 ```swift
 indirect enum JsonObject {
     case dictionnary([String: JsonObject])
