@@ -1,6 +1,6 @@
 # JsonReader
 
-Swift 4.0 offers a great way to read Json files since **JSONSerialization** can turn a Data into a value of type **Any** that can be cast in array, dictionnary or every other type of variable found in a json file.
+Swift 4.0 offers a great way to read Json files since **JSONSerialization** can turn a Data into a value of type **Any** that can be cast into an array, a dictionnary or every other type of variable found in a json file.
 
 We can basically read json from a data like this :
 
@@ -33,7 +33,7 @@ let jsonResult = try JSONSerialization.jsonObject(with: data,
 
 The only problem with this approach is that we have to cast our object of type **Any** into a lot of differents types.
 
-The point of this package is to turn big syntax like this :
+The point of this package is to turn a big syntax like this :
 
 ```swift
 if let dictionnary = jsonResult as? [String: Any] {
@@ -56,7 +56,7 @@ if let name = object["person"]?[0]?["name"]?.stringValue {
 }
 ```
 
-To do so, we turn the json result into an enumeration that define wich type it is :
+To do so, we turn the json result into an enumeration that define witch type it is :
 ```swift
 indirect enum JsonObject {
     case dictionnary([String: JsonObject])
